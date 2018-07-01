@@ -129,6 +129,7 @@ class Source(Ncm2Source):
                         menu=complete.get('type', ''),
                         info=complete.get('doc', ''),
                         )
+            item = self.match_formalize(ctx, item)
 
             matches.append(item)
 
@@ -157,7 +158,9 @@ class Source(Ncm2Source):
                     # There's optional args, don't jump out of parentheses
                     optional = '${1}'
 
-                item['snippet'] = item['word'] + \
+                ud = item['user_data']
+                ud['is_snippet'] = 1
+                ud['snippet'] = item['word'] + \
                     '(' + ", ".join(snip_params) + optional + ')${0}'
 
         startccol = cmpls['start']['ch'] + 1
