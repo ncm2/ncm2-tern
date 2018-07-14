@@ -5,7 +5,8 @@ let s:loaded = 1
 
 let g:ncm2_tern#proc = yarp#py3('ncm2_tern')
 
-let g:ncm2_tern#source = get(g:, 'ncm2_tern#source', {
+let g:ncm2_tern#source = extend(
+            \ get(g:, 'ncm2_tern#source', {}), {
             \ 'name': 'tern',
             \ 'priority': 9,
             \ 'mark': 'js',
@@ -16,11 +17,7 @@ let g:ncm2_tern#source = get(g:, 'ncm2_tern#source', {
             \ 'complete_pattern': ['\.', "require\\s*\\(\\s*['\"][^)'\"]*"],
             \ 'on_complete': 'ncm2_tern#on_complete',
             \ 'on_warmup': 'ncm2_tern#on_warmup',
-            \ })
-
-let g:ncm2_tern#source = extend(g:ncm2_tern#source,
-            \ get(g:, 'ncm2_tern#source_override', {}),
-            \ 'force')
+            \ }, 'keep')
 
 func! ncm2_tern#init()
     call ncm2#register_source(g:ncm2_tern#source)
