@@ -8,6 +8,7 @@ let g:ncm2_tern#proc = yarp#py3('ncm2_tern')
 let g:ncm2_tern#source = extend(
             \ get(g:, 'ncm2_tern#source', {}), {
             \ 'name': 'tern',
+            \ 'ready': 0,
             \ 'priority': 9,
             \ 'mark': 'js',
             \ 'early_cache': 1,
@@ -18,6 +19,10 @@ let g:ncm2_tern#source = extend(
             \ 'on_complete': 'ncm2_tern#on_complete',
             \ 'on_warmup': 'ncm2_tern#on_warmup',
             \ }, 'keep')
+
+func! g:ncm2_tern#proc.on_load()
+    let g:ncm2_tern#source.ready = 1
+endfunc
 
 func! ncm2_tern#init()
     call ncm2#register_source(g:ncm2_tern#source)
