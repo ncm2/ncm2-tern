@@ -28,12 +28,21 @@ class Tern:
                 args.insert(0, nodejs)
         proc = subprocess.Popen(args,
                                 stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                stderr=subprocess.DEVNULL
+                                stderr=subprocess.PIPE
                                 )
         line = proc.stdout.readline().decode('utf8')
         logger.info('read line: %s', line)
 
         match = re.match(r'Listening on port (\d+)', line)
+
+        if not match:
+            stdout_output = "\n".join(map(lambda x: x.decode('utf-8'), proc.stdout.readlines()))
+            stderr_output = "\n".join(map(lambda x: x.decode('utf-8'), proc.stderr.readlines()))
+            raise Exception(
+                ("Did not get expected output starting tern, got the following:\n"
+                "stdout: %s\n"
+                "stderr: %s\n") % (stdout_output, stderr_output)
+            )
 
         self._port = match.group(1)
         logger.info('port [%s]', self._port)
