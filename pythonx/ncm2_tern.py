@@ -101,13 +101,10 @@ class Source(Ncm2Source):
         src = self.get_src(src, ctx)
         lnum = ctx['lnum']
         ccol = ctx['ccol']
-        bcol = ctx['bcol']
         filepath = ctx['filepath']
-        startccol = ctx['startccol']
-        typed = ctx['typed']
 
-        cmpls = self._tern.completions(src, lnum-1, len(typed), filepath)
-        logger.info('completions %s, typed[%s], %s', cmpls, typed, ctx)
+        cmpls = self._tern.completions(src, lnum - 1, ccol - 1, filepath)
+        logger.info('completions %s, typed [%s]', cmpls, ctx['typed'])
 
         if not cmpls or not cmpls.get('completions', None):
             return
