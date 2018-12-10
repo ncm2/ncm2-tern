@@ -15,7 +15,9 @@ let g:ncm2_tern#source = extend(
             \ 'subscope_enable': 1,
             \ 'scope': ['javascript','javascript.jsx'],
             \ 'word_pattern': '[\w/]+',
-            \ 'complete_pattern': ['\.', "require\\s*\\(\\s*['\"][^)'\"]*"],
+            \ 'complete_pattern': ['\.',
+            \       "(require|import)\\s*\\(\\s*['\"]",
+            \       "from\\s+['\"]"],
             \ 'on_complete': 'ncm2_tern#on_complete',
             \ 'on_warmup': 'ncm2_tern#on_warmup',
             \ }, 'keep')
