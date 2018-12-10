@@ -102,6 +102,7 @@ class Source(Ncm2Source):
         lnum = ctx['lnum']
         ccol = ctx['ccol']
         filepath = ctx['filepath']
+        refresh = 0
 
         cmpls = self._tern.completions(src, lnum - 1, ccol - 1, filepath)
         logger.info('completions %s, typed [%s]', cmpls, ctx['typed'])
@@ -120,7 +121,17 @@ class Source(Ncm2Source):
             #     "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/copyWithin"
             # }
 
-            item = dict(word=complete['name'],
+            w = complete['name']
+            abbr = w
+
+            # workaround for #5
+            if w.endswith('"') or w.endswith("'"):
+                refresh = 1
+                if w[-1] == lines[lnum - 1][ccol - 1:ccol]:
+                    w = w[:-1]
+
+            item = dict(word=w,
+                        abbr=abbr,
                         icase=1,
                         dup=1,
                         menu=complete.get('type', ''),
@@ -161,7 +172,7 @@ class Source(Ncm2Source):
                     '(' + ", ".join(snip_params) + optional + ')${0}'
 
         startccol = cmpls['start']['ch'] + 1
-        ret = self.complete(ctx, startccol, matches)
+        ret = self.complete(ctx, startccol, matches, refresh)
         logger.info('matches %s, ret %s', matches, ret)
 
 
